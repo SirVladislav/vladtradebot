@@ -1,7 +1,7 @@
 # Pawl
 
 [![Autobahn Testsuite](https://img.shields.io/badge/Autobahn-passing-brightgreen.svg)](http://socketo.me/reports/pawl/index.html)
-[![CI status](https://github.com/ratchetphp/Pawl/workflows/CI/badge.svg)](https://github.com/ratchetphp/Pawl/actions)
+[![Build Status](https://travis-ci.org/ratchetphp/Pawl.svg?branch=master)](https://travis-ci.org/ratchetphp/Pawl)
 
 An asynchronous WebSocket client in PHP
 
@@ -10,23 +10,24 @@ An asynchronous WebSocket client in PHP
 
 #### Usage
 Pawl as a standalone app: Connect to an echo server, send a message, display output, close connection:
-
 ```php
 <?php
 
-require __DIR__ . '/vendor/autoload.php';
+    require __DIR__ . '/vendor/autoload.php';
 
-\Ratchet\Client\connect('wss://echo.websocket.org:443')->then(function($conn) {
-    $conn->on('message', function($msg) use ($conn) {
-        echo "Received: {$msg}\n";
-        $conn->close();
+    \Ratchet\Client\connect('wss://echo.websocket.org:443')->then(function($conn) {
+        $conn->on('message', function($msg) use ($conn) {
+            echo "Received: {$msg}\n";
+            $conn->close();
+        });
+
+        $conn->send('Hello World!');
+    }, function ($e) {
+        echo "Could not connect: {$e->getMessage()}\n";
     });
-
-    $conn->send('Hello World!');
-}, function ($e) {
-    echo "Could not connect: {$e->getMessage()}\n";
-});
 ```
+
+---
 
 #### Classes
 
@@ -56,29 +57,31 @@ A more in-depth example using explicit interfaces: Requesting sub-protocols, and
 ```php
 <?php
 
-require __DIR__ . '/vendor/autoload.php';
+    require __DIR__ . '/vendor/autoload.php';
 
-$reactConnector = new \React\Socket\Connector([
-    'dns' => '8.8.8.8',
-    'timeout' => 10
-]);
-$loop = \React\EventLoop\Loop::get();
-$connector = new \Ratchet\Client\Connector($loop, $reactConnector);
+    $loop = \React\EventLoop\Factory::create();
+    $reactConnector = new \React\Socket\Connector($loop, [
+        'dns' => '8.8.8.8',
+        'timeout' => 10
+    ]);
+    $connector = new \Ratchet\Client\Connector($loop, $reactConnector);
 
-$connector('ws://127.0.0.1:9000', ['protocol1', 'subprotocol2'], ['Origin' => 'http://localhost'])
-->then(function(\Ratchet\Client\WebSocket $conn) {
-    $conn->on('message', function(\Ratchet\RFC6455\Messaging\MessageInterface $msg) use ($conn) {
-        echo "Received: {$msg}\n";
-        $conn->close();
+    $connector('ws://127.0.0.1:9000', ['protocol1', 'subprotocol2'], ['Origin' => 'http://localhost'])
+    ->then(function(Ratchet\Client\WebSocket $conn) {
+        $conn->on('message', function(\Ratchet\RFC6455\Messaging\MessageInterface $msg) use ($conn) {
+            echo "Received: {$msg}\n";
+            $conn->close();
+        });
+
+        $conn->on('close', function($code = null, $reason = null) {
+            echo "Connection closed ({$code} - {$reason})\n";
+        });
+
+        $conn->send('Hello World!');
+    }, function(\Exception $e) use ($loop) {
+        echo "Could not connect: {$e->getMessage()}\n";
+        $loop->stop();
     });
 
-    $conn->on('close', function($code = null, $reason = null) {
-        echo "Connection closed ({$code} - {$reason})\n";
-    });
-
-    $conn->send('Hello World!');
-}, function(\Exception $e) use ($loop) {
-    echo "Could not connect: {$e->getMessage()}\n";
-    $loop->stop();
-});
+    $loop->run();
 ```

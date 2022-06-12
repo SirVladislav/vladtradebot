@@ -29,7 +29,9 @@ class RequestUriTest extends TestCase {
      * @dataProvider uriDataProvider
      */
     function testGeneratedRequestUri($uri, $expectedRequestUri) {
-        $connector = new Connector();
+        $loop = Factory::create();
+
+        $connector = new Connector($loop);
 
         $generateRequest = self::getPrivateClassMethod('\Ratchet\Client\Connector', 'generateRequest');
         $request = $generateRequest->invokeArgs($connector, [$uri, [], []]);

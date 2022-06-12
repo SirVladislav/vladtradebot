@@ -1,5 +1,4 @@
-/composer.lock
-/phpunit.xml
-/reports
-/vendor/
-/tests/autobahn/reports
+phpunit.xml
+reports
+vendor
+composer.lock

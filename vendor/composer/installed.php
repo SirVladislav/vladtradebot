@@ -38,6 +38,15 @@
       ),
       'reference' => '83260bb50b8fc753c72d14dc1621a2dac31877ee',
     ),
+    'jaggedsoft/php-binance-api' => 
+    array (
+      'pretty_version' => 'v0.5.28',
+      'version' => '0.5.28.0',
+      'aliases' => 
+      array (
+      ),
+      'reference' => '577bf515dc56404358784431e25a640a5a905f84',
+    ),
     'psr/http-factory' => 
     array (
       'pretty_version' => '1.0.1',
@@ -81,12 +90,12 @@
     ),
     'ratchet/pawl' => 
     array (
-      'pretty_version' => 'v0.4.1',
-      'version' => '0.4.1.0',
+      'pretty_version' => 'v0.3.5',
+      'version' => '0.3.5.0',
       'aliases' => 
       array (
       ),
-      'reference' => 'af70198bab77a582b31169d3cc3982bed25c161f',
+      'reference' => '89ec703c76dc893484a2a0ed44b48a37d445abd5',
     ),
     'ratchet/rfc6455' => 
     array (

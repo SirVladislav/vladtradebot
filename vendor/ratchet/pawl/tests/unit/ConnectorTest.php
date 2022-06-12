@@ -2,23 +2,12 @@
 
 use PHPUnit\Framework\TestCase;
 use Ratchet\Client\Connector;
-use React\EventLoop\Loop;
+use React\EventLoop\Factory;
 use React\Promise\RejectedPromise;
 use React\Promise\Promise;
 
 class ConnectorTest extends TestCase
 {
-    public function testConstructWithoutLoopAssignsLoopAutomatically()
-    {
-        $factory = new Connector();
-
-        $ref = new \ReflectionProperty($factory, '_loop');
-        $ref->setAccessible(true);
-        $loop = $ref->getValue($factory);
-
-        $this->assertInstanceOf('React\EventLoop\LoopInterface', $loop);
-    }
-
     public function uriDataProvider() {
         return [
             ['ws://127.0.0.1', 'tcp://127.0.0.1:80'],
@@ -32,9 +21,9 @@ class ConnectorTest extends TestCase
      * @dataProvider uriDataProvider
      */
     public function testSecureConnectionUsesTlsScheme($uri, $expectedConnectorUri) {
-        $loop = Loop::get();
+        $loop = Factory::create();
 
-        $connector = $this->getMockBuilder('React\Socket\ConnectorInterface')->getMock();
+        $connector = $this->getMock('React\Socket\ConnectorInterface');
 
         $connector->expects($this->once())
             ->method('connect')
