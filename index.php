@@ -2,6 +2,7 @@
 require 'vendor/autoload.php';
 $api = new Binance\API();
 //asdasd
+$price = $api->price("BNBBTC");
 print"<pre>";
-print_r($api);
+print_r($price);
 ?>
