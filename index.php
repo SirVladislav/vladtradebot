@@ -5,3 +5,6 @@ $api = new Binance\API("ewbwdRMN7sJw5KByJnYPOSdPXP7vCwMzBZoqOdN5BlLELnP3mQSoeQ8b
 print"<pre>";
 print_r($_POST);
 ?>
+<script>
+    console.log("yes");
+</script>
