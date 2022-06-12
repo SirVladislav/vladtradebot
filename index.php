@@ -1,8 +1,7 @@
 <?php
 require 'vendor/autoload.php';
-$api = new Binance\API();
-$api = new Binance\API("<api key>","<secret>");
 
+$api = new Binance\API("ewbwdRMN7sJw5KByJnYPOSdPXP7vCwMzBZoqOdN5BlLELnP3mQSoeQ8bninkgUx4","2tc1wt1lvKt5tPTVMPmgPca0FfTNi6vYlcDA4DgHYvgYD4ZUUygbuXPHat3pCABa");
 
 $price = $api->price("BNBBTC");
 print"<pre>";
